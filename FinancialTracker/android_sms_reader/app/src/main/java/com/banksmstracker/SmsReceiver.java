@@ -33,7 +33,7 @@ import okhttp3.Response;
 public class SmsReceiver extends BroadcastReceiver {
 
     private static final String TAG = "SmsReceiver";
-    private static final String SERVER_URL = "https://FinancialTracker.sudheer20991.repl.co/sms/process";
+    private static final String SERVER_URL = "https://bank-sms-tracker.sudheer20991.repl.co/sms/process";
 
     @Override
     public void onReceive(Context context, Intent intent) {
