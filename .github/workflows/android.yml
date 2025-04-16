@@ -1,30 +1,31 @@
-name: Android Build
+name: Build Android App
 
-on:
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Setup JDK
+      - uses: actions/checkout@v2
+      
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
+          java-version: 11
           distribution: 'adopt'
-          java-version: '11'
-
-      - name: Build APK
-        run: |
-          chmod +x ./gradlew
-          ./gradlew assembleDebug --stacktrace
-
-      - name: Upload Debug APK
+      
+      - name: Make gradlew executable
+        run: chmod +x ./gradlew
+      
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
+      
+      - name: List files for debugging
+        run: find . -name "*.apk"
+      
+      - name: Save APK
         uses: actions/upload-artifact@v2
         with:
           name: debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          path: ${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk
+          if-no-files-found: error
