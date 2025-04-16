@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Bank SMS Tracker</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="history">History</string>
+    <string name="total_income">Total Income</string>
+    <string name="total_expense">Total Expense</string>
+    <string name="net_balance">Net Balance</string>
+    <string name="no_transactions">No transactions found for this month</string>
+    <string name="financial_summary">Financial Summary</string>
+    <string name="transaction_history">Transaction History</string>
+    <string name="permissions_required">SMS permissions are required to track bank transactions</string>
+</resources>

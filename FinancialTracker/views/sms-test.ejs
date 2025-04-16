@@ -1,0 +1,138 @@
+<%- include('partials/header') %>
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h4>Test Bank SMS Processing</h4>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">Use this form to simulate receiving a bank SMS message. This is useful for testing how the system processes different types of bank messages.</p>
+                    
+                    <form id="smsTestForm">
+                        <div class="mb-3">
+                            <label for="sender" class="form-label">SMS Sender ID / Bank ID</label>
+                            <input type="text" class="form-control" id="sender" name="sender" placeholder="e.g., HDFCBK, ICICIBK, SBIINB" required>
+                            <small class="text-muted">This represents the bank's SMS sender ID</small>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="message" class="form-label">SMS Message Content</label>
+                            <textarea class="form-control" id="message" name="message" rows="5" placeholder="Enter bank SMS content here..." required></textarea>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label class="form-label">Sample Message Templates:</label>
+                            <div class="list-group">
+                                <button type="button" class="list-group-item list-group-item-action sample-message" data-sender="HDFCBK" data-message="Dear Customer, Your a/c no. XX7890 has been credited with INR 25,000.00 on 15/04/2025 by a/c linked to mobile 9XXXXXXX45-SALARY. Avl Bal: INR 32,456.75">Credit Transaction - Salary</button>
+                                <button type="button" class="list-group-item list-group-item-action sample-message" data-sender="ICICIBK" data-message="ICICI Bank: Rs.1,450.00 debited from a/c XX5678 on 14-Apr-25 towards UPI-GROCERY STORE. UPI Ref: 123456789012. Balance: Rs.28,560.50">Debit Transaction - UPI Payment</button>
+                                <button type="button" class="list-group-item list-group-item-action sample-message" data-sender="SBIINB" data-message="SBI: Rs.3,500.00 withdrawn from A/c XXXXXX7777 on 14APR25 at ATM. Avail Bal: Rs.15,670.25">ATM Withdrawal</button>
+                            </div>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary">Process SMS</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header bg-success text-white">
+                    <h4>Processing Result</h4>
+                </div>
+                <div class="card-body">
+                    <div id="processingResult">
+                        <div class="alert alert-info">
+                            Submit a sample SMS to see the processing result here.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Handle sample message selection
+    document.querySelectorAll('.sample-message').forEach(button => {
+        button.addEventListener('click', function() {
+            const sender = this.getAttribute('data-sender');
+            const message = this.getAttribute('data-message');
+            
+            document.getElementById('sender').value = sender;
+            document.getElementById('message').value = message;
+        });
+    });
+    
+    // Handle form submission
+    document.getElementById('smsTestForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = {
+            sender: document.getElementById('sender').value,
+            message: document.getElementById('message').value
+        };
+        
+        // Display loading state
+        document.getElementById('processingResult').innerHTML = `
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+                <p class="mt-2">Processing SMS message...</p>
+            </div>
+        `;
+        
+        // Submit to server
+        fetch('/sms/test', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            let resultHtml = '';
+            
+            if (data.success) {
+                resultHtml = `
+                    <div class="alert alert-success">
+                        <h5>SMS Processed Successfully!</h5>
+                    </div>
+                    <div class="card mb-3">
+                        <div class="card-header">Transaction Details</div>
+                        <div class="card-body">
+                            <pre class="mb-0">${JSON.stringify(data.message, null, 2)}</pre>
+                        </div>
+                    </div>
+                `;
+            } else {
+                resultHtml = `
+                    <div class="alert alert-danger">
+                        <h5>Processing Error</h5>
+                        <p>${data.message}</p>
+                        ${data.error ? `<p>Error: ${data.error}</p>` : ''}
+                    </div>
+                `;
+            }
+            
+            document.getElementById('processingResult').innerHTML = resultHtml;
+        })
+        .catch(error => {
+            document.getElementById('processingResult').innerHTML = `
+                <div class="alert alert-danger">
+                    <h5>Connection Error</h5>
+                    <p>Failed to communicate with the server. Please try again.</p>
+                    <p>Error: ${error.message}</p>
+                </div>
+            `;
+        });
+    });
+});
+</script>
+
+<%- include('partials/footer') %>

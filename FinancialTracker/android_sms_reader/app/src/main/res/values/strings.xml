@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Bank SMS Tracker</string>
+    <string name="sync_sms">Sync Bank SMS Messages</string>
+    <string name="view_dashboard">View Financial Dashboard</string>
+    <string name="app_description">This app reads your bank SMS messages and sends them to the analysis server, which categorizes them as income or expenses.</string>
+    <string name="status_ready">Ready to sync SMS messages</string>
+    <string name="status_reading">Reading SMS messages...</string>
+    <string name="status_uploading">Uploading messages to server...</string>
+    <string name="status_success">Successfully uploaded %1$d messages</string>
+    <string name="status_no_messages">No SMS messages found</string>
+    <string name="status_permission_denied">SMS permission denied. Cannot read bank messages.</string>
+    <string name="footer_copyright">© 2025 Bank SMS Tracker</string>
+</resources>

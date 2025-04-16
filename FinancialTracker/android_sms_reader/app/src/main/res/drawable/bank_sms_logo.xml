@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="120dp"
+    android:height="120dp"
+    android:viewportWidth="120"
+    android:viewportHeight="120">
+
+    <!-- Blue circle background -->
+    <path
+        android:fillColor="#0066CC"
+        android:pathData="M60,60m-60,0a60,60 0,1 1,120 0a60,60 0,1 1,-120 0" />
+
+    <!-- Bank building (white) -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,45L90,45L60,25Z" />
+    
+    <!-- Columns -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M35,45L35,75L45,75L45,45Z" />
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M55,45L55,75L65,75L65,45Z" />
+    
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M75,45L75,75L85,75L85,45Z" />
+    
+    <!-- Base -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M30,75L90,75L90,85L30,85Z" />
+    
+    <!-- SMS Message Icon -->
+    <path
+        android:fillColor="#FFD700"
+        android:pathData="M75,50m-15,0a15,15 0,1 1,30 0a15,15 0,1 1,-30 0" />
+    
+    <path
+        android:fillColor="#0066CC"
+        android:pathData="M69,50L81,50L75,56Z" />
+
+</vector>

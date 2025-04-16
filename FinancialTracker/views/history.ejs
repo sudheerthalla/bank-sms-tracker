@@ -1,0 +1,131 @@
+<%- include('partials/header') %>
+
+<h1 class="mb-4">Transaction History</h1>
+
+<!-- Month selector -->
+<div class="row mb-4">
+  <div class="col-md-6">
+    <form action="/history" method="get" class="form-inline">
+      <div class="input-group">
+        <label class="input-group-text" for="monthSelect">Month:</label>
+        <select class="form-select" id="monthSelect" name="month" onchange="this.form.submit()">
+          <% months.forEach(function(month) { %>
+            <option value="<%= month.value %>" <%= selectedMonth === month.value ? 'selected' : '' %>>
+              <%= month.display %>
+            </option>
+          <% }); %>
+        </select>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Transactions list -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        Transaction Details
+      </div>
+      <div class="card-body">
+        <% if (isEmpty) { %>
+          <div class="alert alert-info text-center">
+            No transactions found for this month.
+          </div>
+        <% } else { %>
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Source</th>
+                  <th>Type</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% transactions.forEach(function(transaction) { %>
+                  <tr>
+                    <td><%= moment(transaction.date).format('DD MMM YYYY, HH:mm') %></td>
+                    <td><%= transaction.description %></td>
+                    <td><%= transaction.source %></td>
+                    <td>
+                      <span class="badge <%= transaction.type === 'income' ? 'bg-success' : 'bg-danger' %>">
+                        <%= transaction.type === 'income' ? 'Income' : 'Expense' %>
+                      </span>
+                    </td>
+                    <td class="<%= transaction.type === 'income' ? 'text-success' : 'text-danger' %>">
+                      <%= transaction.type === 'income' ? '+' : '-' %>₹<%= (parseFloat(transaction.amount) || 0).toFixed(2) %>
+                    </td>
+                  </tr>
+                <% }); %>
+              </tbody>
+            </table>
+          </div>
+        <% } %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Add Transaction Modal Button -->
+<div class="position-fixed bottom-0 end-0 p-3">
+  <button type="button" class="btn btn-lg btn-primary rounded-circle" data-bs-toggle="modal" data-bs-target="#addTransactionModal">+</button>
+</div>
+
+<!-- Add Transaction Modal -->
+<div class="modal fade" id="addTransactionModal" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Add Manual Transaction</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="/transactions/add" method="post">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label class="form-label">Transaction Type</label>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="type" id="typeIncome" value="income" checked>
+              <label class="form-check-label" for="typeIncome">Income</label>
+            </div>
+            <div class="form-check">
+              <input class="form-check-input" type="radio" name="type" id="typeExpense" value="expense">
+              <label class="form-check-label" for="typeExpense">Expense</label>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="amount" class="form-label">Amount</label>
+            <div class="input-group">
+              <span class="input-group-text">₹</span>
+              <input type="number" step="0.01" class="form-control" id="amount" name="amount" required>
+            </div>
+          </div>
+          
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <input type="text" class="form-control" id="description" name="description" placeholder="e.g. Salary, Rent, Groceries">
+          </div>
+          
+          <div class="mb-3">
+            <label for="source" class="form-label">Source</label>
+            <input type="text" class="form-control" id="source" name="source" placeholder="e.g. Company name, Store name">
+          </div>
+          
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="datetime-local" class="form-control" id="date" name="date">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Transaction</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<%- include('partials/footer') %>
