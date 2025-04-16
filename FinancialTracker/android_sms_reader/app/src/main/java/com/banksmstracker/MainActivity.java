@@ -40,7 +40,7 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final int SMS_PERMISSION_CODE = 100;
-    private static final String SERVER_URL = "https://FinancialTracker.sudheer20991.repl.co/sms/process";
+    private static final String SERVER_URL = "https://bank-sms-tracker.sudheer20991.repl.co/sms/process";
     
     private TextView statusTextView;
     private Button syncButton;
