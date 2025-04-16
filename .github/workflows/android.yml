@@ -1,26 +1,27 @@
-name: Android Build with Third-Party Action
+name: Android Build
 
-on: 
-  push:
-    branches: [ main, master ]
-  workflow_dispatch:
+on: workflow_dispatch
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
       
-      - name: Build APK
-        uses: sparkfabrik/android-build-action@v1.0.0
+      - name: Set up JDK
+        uses: actions/setup-java@v2
         with:
-          project-path: .
-          output-path: my-app.apk
-          gradle-task: assembleDebug
+          java-version: 11
+          distribution: 'adopt'
+      
+      - name: Grant permissions
+        run: chmod +x ./gradlew
+      
+      - name: Build debug APK
+        run: ./gradlew assembleDebug
       
       - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
           name: app-debug
-          path: my-app.apk
+          path: app/build/outputs/apk/debug/app-debug.apk
