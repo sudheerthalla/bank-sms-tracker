@@ -1,31 +1,26 @@
-name: Build Android App
+name: Android Build with Third-Party Action
 
-on: workflow_dispatch
+on: 
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       
-      - name: Set up JDK
-        uses: actions/setup-java@v2
+      - name: Build APK
+        uses: sparkfabrik/android-build-action@v1.0.0
         with:
-          java-version: 11
-          distribution: 'adopt'
+          project-path: .
+          output-path: my-app.apk
+          gradle-task: assembleDebug
       
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
-      
-      - name: Build debug APK
-        run: ./gradlew assembleDebug
-      
-      - name: List files for debugging
-        run: find . -name "*.apk"
-      
-      - name: Save APK
+      - name: Upload APK
         uses: actions/upload-artifact@v2
         with:
-          name: debug-apk
-          path: ${{ github.workspace }}/app/build/outputs/apk/debug/app-debug.apk
-          if-no-files-found: error
+          name: app-debug
+          path: my-app.apk
